@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: 'Helvetica Neue', 'Suisse Int’l', 'Optima', sans-serif;
+
   color: #3C3C3C;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #666;
+  padding: 10px;
+}
+
+
+.desc_title {
+  font-size: 14px;
+    line-height: 1.4;
+    font-family: Suisse Medium, sans-serif;
+    color: #333;
+    flex-grow: 2;
+    margin: 0 0 17px;
 }
