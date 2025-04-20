@@ -24,3 +24,17 @@ body {
     flex-grow: 2;
     margin: 0 0 17px;
 }
+
+/* global.css 或对应样式文件中添加 */
+.custom-login-modal .ant-modal-content {
+  background-color: #f6f5e8;
+  padding: 40px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.custom-login-modal .ant-modal-close {
+  top: 20px;
+  right: 20px;
+}
+

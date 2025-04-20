@@ -3,6 +3,7 @@ import { Carousel } from 'antd';
 import { Button } from 'antd';
 import { RightOutlined } from '@ant-design/icons';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import DefaultButton from '../components/DefaultButton'
 
 const contentStyle = {
   height: '160px',
@@ -62,9 +63,8 @@ export default function HomePage() {
             <p className="text-gray-700 mb-6 max-w-md">
               A simple pleasure: employing a pleasingly textured cloth to wash the body or towel a freshly cleansed face. Receive an Aesop Face Cloth with all orders over $150. Excludes Click and Collect.
             </p>
-            <Button type="default" size="large" className="border-black text-black hover:bg-black hover:text-white hover:border-black transition-colors duration-300">
-              Explore body care<RightOutlined />
-            </Button>
+            <DefaultButton label="Explore body care" onClick={() => console.log('clicked')} />
+            
           </div>
         </div>
       </div>
@@ -90,13 +90,7 @@ export default function HomePage() {
             <p className="text-gray-700 mb-6 max-w-md">
               A curated range of gifts—both efficacious and aromatic—to convey your gratitude.
             </p>
-            <Button
-              type="default"
-              size="large"
-              className="border-black text-black hover:bg-black hover:text-white hover:border-black transition-colors duration-300"
-            >
-              Discover Mother's Day gifts<RightOutlined />
-            </Button>
+            <DefaultButton label="Discover Mother's Day gifts" onClick={() => console.log('clicked')} />
 
           </div>
 

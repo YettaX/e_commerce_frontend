@@ -1,6 +1,7 @@
 // /components/CategoryMegaMenu.jsx
 import React, { useState } from "react";
 import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
+import { Modal, Input, Button } from 'antd';
 
 const fakeMenuData = [
   {
@@ -41,25 +42,64 @@ const fakeMenuData = [
 
 export default function CategoryMegaMenu() {
   const [activeMenuId, setActiveMenuId] = useState(null);
-  const isVisiableMenu = useState(false)
+  const [isVisibleMenu, setIsVisibleMenu] = useState(false);
+
+
 
   const activeItem = fakeMenuData.find((item) => item.id === activeMenuId);
 
   const openSubMenu = (menuId) => {
     setActiveMenuId(menuId);
-    isVisiableMenu(true);
+    setIsVisibleMenu(true);
   };
 
   const closeSubMenu = () => {
     setActiveMenuId(null);
-    isVisiableMenu(false);
+    setIsVisibleMenu(false);
   }
+
+  // Login area
+  const [isVisibleLogin, setIsVisibleLogin] = useState(false);
+  const [isVisibleRegister, setIsVisibleRegister] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Content of the modal');
+
+  const handleOk = () => {
+    setModalText('The modal will be closed after two seconds');
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setIsVisibleLogin(false); // or setIsVisibleRegister(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setIsVisibleLogin(false);
+    setIsVisibleRegister(false);
+  };
+
+  const openLogin = () => {
+    setIsVisibleLogin(true);
+  };
+
+  const changeLoginRegister = () => {
+    setIsVisibleLogin((prev) => !prev);
+    setIsVisibleRegister((prev) => !prev);
+  };
+
+  const closeLoginRegister = () => {
+    setIsVisibleLogin(false);
+    setIsVisibleRegister(false);
+  };
+
+
 
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full ">
       {/* Top Navigation Bar */}
-      <div className="flex items-center  p-10 bg-[#fffef2] text-sm font-medium text-[#3C3D37]">
+      <div className="flex items-center justify-between p-10 bg-[#fffef2] text-sm font-medium text-[#3C3D37]">
         <div className="space-x-10 pl-3">
           {fakeMenuData.map((menu) => (
             <button
@@ -74,7 +114,47 @@ export default function CategoryMegaMenu() {
           ))}
           <button className="text-lg"><SearchOutlined /></button>
         </div>
+
+        <div className="space-x-10 pl-3">
+          <button onClick={() => openLogin()}>Login</button>
+          <button>Cart</button>
+        </div>
       </div>
+
+
+      {/** Open Login Area */}
+      <Modal
+        open={isVisibleLogin}
+        onCancel={closeLoginRegister}
+        footer={null}
+        centered
+        closable
+        className="custom-login-modal"
+      >
+        <h2 className="text-lg font-semibold mb-4">Log in to your account</h2>
+
+        <div className="mb-4">
+          <label className="block text-sm mb-1">Email address</label>
+          <Input placeholder="you@example.com" />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm mb-1">Password</label>
+          <Input.Password placeholder="••••••••" />
+        </div>
+
+        <button className=" w-full bg-black text-white py-2 font-medium hover:bg-[#333333] active:bg-[#333333]">
+          Log in
+        </button>
+
+
+        <div className="mt-6 text-sm text-gray-600">
+          <p className="mb-2">New to Aesop?</p>
+          <button className="button-default w-full text-black py-2 font-medium border-solid">
+          Create new account
+        </button>
+        </div>
+      </Modal>
 
       {/* Submenu Area */}
       {activeItem && (
@@ -102,7 +182,7 @@ export default function CategoryMegaMenu() {
           {/*Real submenu area*/}
           <div className="flex flex-col md:flex-row ">
 
-            {/* Logo area*/ }
+            {/* Logo area*/}
             <div className="flex flex-col  px-6 py-4 md:w-1/5 mt-20">
               <img
                 src="/images/logo.png"
@@ -126,7 +206,7 @@ export default function CategoryMegaMenu() {
               </ul>
             </div>
 
-            
+
             <div className="md:w-1/5 mt-20">
               <h3 className="font-semibold mb-8 ">New additions</h3>
               <ul className="space-y-4 hover:underline cursor-pointer">
