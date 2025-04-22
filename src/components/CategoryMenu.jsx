@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
 import { Modal, Input, Button } from 'antd';
 
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
+
 const fakeMenuData = [
   {
     id: 1,
@@ -42,7 +45,7 @@ const fakeMenuData = [
 
 export default function CategoryMegaMenu() {
   const [activeMenuId, setActiveMenuId] = useState(null);
-  const [isVisibleMenu, setIsVisibleMenu] = useState(false);
+
 
 
 
@@ -58,41 +61,19 @@ export default function CategoryMegaMenu() {
     setIsVisibleMenu(false);
   }
 
-  // Login area
-  const [isVisibleLogin, setIsVisibleLogin] = useState(false);
-  const [isVisibleRegister, setIsVisibleRegister] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
-
-  const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setIsVisibleLogin(false); // or setIsVisibleRegister(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    setIsVisibleLogin(false);
-    setIsVisibleRegister(false);
-  };
+  const [modalMode, setModalMode] = useState('close');
 
   const openLogin = () => {
-    setIsVisibleLogin(true);
+    setModalMode('login');
   };
 
-  const changeLoginRegister = () => {
-    setIsVisibleLogin((prev) => !prev);
-    setIsVisibleRegister((prev) => !prev);
+  const openRegister = () => {
+    setModalMode('register');
   };
 
-  const closeLoginRegister = () => {
-    setIsVisibleLogin(false);
-    setIsVisibleRegister(false);
+  const closeModal = () => {
+    setModalMode('close');
   };
-
 
 
 
@@ -121,40 +102,22 @@ export default function CategoryMegaMenu() {
         </div>
       </div>
 
-
-      {/** Open Login Area */}
       <Modal
-        open={isVisibleLogin}
-        onCancel={closeLoginRegister}
+        open={modalMode === 'login' || modalMode === 'register'}
+        onCancel={() => setModalMode('close')}
         footer={null}
         centered
         closable
         className="custom-login-modal"
       >
-        <h2 className="text-lg font-semibold mb-4">Log in to your account</h2>
-
-        <div className="mb-4">
-          <label className="block text-sm mb-1">Email address</label>
-          <Input placeholder="you@example.com" />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm mb-1">Password</label>
-          <Input.Password placeholder="••••••••" />
-        </div>
-
-        <button className=" w-full bg-black text-white py-2 font-medium hover:bg-[#333333] active:bg-[#333333]">
-          Log in
-        </button>
-
-
-        <div className="mt-6 text-sm text-gray-600">
-          <p className="mb-2">New to Aesop?</p>
-          <button className="button-default w-full text-black py-2 font-medium border-solid">
-          Create new account
-        </button>
-        </div>
+        {modalMode === 'login' && (
+        <LoginForm switchToRegister={() => setModalMode('register')} />
+      )}
+      {modalMode === 'register' && (
+        <RegisterForm switchToLogin={() => setModalMode('login')} />
+      )}
       </Modal>
+
 
       {/* Submenu Area */}
       {activeItem && (
