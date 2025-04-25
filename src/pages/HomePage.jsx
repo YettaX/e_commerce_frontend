@@ -5,6 +5,7 @@ import { RightOutlined } from '@ant-design/icons';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import DefaultButton from '../components/DefaultButton'
 
+
 const contentStyle = {
   height: '160px',
   color: '#fff',
@@ -34,7 +35,7 @@ export default function HomePage() {
 
   return (
     <div>
-    <Carousel autoplay>
+    <Carousel  arrows autoplay infinite={false}>
       <div>
         <div className="w-full flex flex-col md:flex-row"
           style={{

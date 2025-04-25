@@ -1,7 +1,53 @@
-import { CloseOutlined } from '@ant-design/icons';
-import { Modal, Input, Button } from 'antd';
+import { useState } from 'react';
+import {Input, message } from 'antd';
 
-export default function LoginForm({ switchToRegister }) {
+export default function LoginForm({ switchToRegister, closeModal }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [messageApi, contextHolder] = message.useMessage();
+    const success = () => {
+        messageApi.open({
+          type: 'Login success!',
+          content: 'You have successfully logged in.',
+        });
+      };
+
+
+    const handleLogin = async () => {
+
+        try {
+
+            const response = await fetch("http://localhost:8080/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                }),
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err?.error || 'Login failed');
+            }
+            const data = await response.json();
+            setErrorMessage('')
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('expiresIn', data.expiresIn);
+            
+            success();
+            closeModal();
+            console.log('Login Success: ', data);
+        } catch (error) {
+            console.error('Login error: ', error);
+            setErrorMessage(error.message || 'Login error')
+        }
+
+
+    }
 
     return (
         <div>
@@ -9,15 +55,29 @@ export default function LoginForm({ switchToRegister }) {
 
             <div className="mb-4">
                 <label className="block text-sm mb-1">Email address</label>
-                <Input placeholder="you@example.com" />
+                <Input
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
             </div>
 
             <div className="mb-4">
                 <label className="block text-sm mb-1">Password</label>
-                <Input.Password placeholder="••••••••" />
+                <Input.Password
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)} />
             </div>
 
-            <button className=" w-full h-16 bg-black text-white py-2 font-medium hover:bg-[#333333] active:bg-[#333333]">
+            {errorMessage && (
+                <div className="text-red-500 mb-4 text-sm font-medium">
+                    {errorMessage}
+                </div>
+            )}
+
+            <button className=" w-full h-16 bg-black text-white py-2 font-medium hover:bg-[#333333] active:bg-[#333333]"
+                onClick={handleLogin}>
                 Log in
             </button>
 
@@ -28,6 +88,11 @@ export default function LoginForm({ switchToRegister }) {
                     Create new account
                 </button>
             </div>
+            {contextHolder}
+
+
+
+
         </div>
     );
 }

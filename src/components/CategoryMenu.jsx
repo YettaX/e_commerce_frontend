@@ -109,12 +109,13 @@ export default function CategoryMegaMenu() {
         centered
         closable
         className="custom-login-modal"
+        zIndex={100}
       >
         {modalMode === 'login' && (
-        <LoginForm switchToRegister={() => setModalMode('register')} />
+        <LoginForm switchToRegister={() => setModalMode('register')} closeModal={() => setModalMode('close')} />
       )}
       {modalMode === 'register' && (
-        <RegisterForm switchToLogin={() => setModalMode('login')} />
+        <RegisterForm switchToLogin={() => setModalMode('login')} closeModal={() => setModalMode('close')}/>
       )}
       </Modal>
 
