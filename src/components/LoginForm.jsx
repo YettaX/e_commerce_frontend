@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Input, message } from 'antd';
 import { useAuth } from '../hooks/useAuth';
+import { request } from '../utils/request';
+import { useUser } from '../context/UserContext';
 
 export default function LoginForm({ switchToRegister, closeModal }) {
     const [email, setEmail] = useState('');
@@ -15,6 +17,7 @@ export default function LoginForm({ switchToRegister, closeModal }) {
     };
 
     const { login } = useAuth();
+    const { loginUser } = useUser();
 
 
     const handleLogin = async () => {
@@ -42,6 +45,12 @@ export default function LoginForm({ switchToRegister, closeModal }) {
             // save token and expiresIn
             login(data.token, data.expiresIn);
 
+            // get user info
+
+            const userInfo = await request('http://localhost:8080/user/account', {
+                method: 'GET'
+            }, data.token);
+            loginUser(userInfo)
             success();
             closeModal();
             window.location.reload();

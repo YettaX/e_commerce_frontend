@@ -8,25 +8,29 @@ import HomePage from './pages/HomePage';
 // router
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ModalProvider } from './context/ModalContext';
+import { UserProvider } from './context/UserContext';
 
 
 
 
 const App = () => {
   return (
-    <ModalProvider>
-      <Router>
-        <div className="relative min-h-screen flex flex-col">
-          <Header />
-          <main className="bg-[#fffef2] flex-1">
-            <Routes>
-              <Route path='/' element={<HomePage />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </ModalProvider>
+    <UserProvider>
+      <ModalProvider>
+        <Router>
+          <div className="relative min-h-screen flex flex-col">
+            <Header />
+            <main className="bg-[#fffef2] flex-1">
+              <Routes>
+                <Route path='/' element={<HomePage />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </ModalProvider>
+    </UserProvider>
+
 
   );
 };

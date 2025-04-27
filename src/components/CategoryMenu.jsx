@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 
 
 import LoginMenu from "./LoginMenu";
+import { useUser } from "../context/UserContext";
 
 const fakeMenuData = [
   {
@@ -47,7 +48,8 @@ const fakeMenuData = [
 export default function CategoryMegaMenu() {
 
   const { isLoggedIn, logout } = useAuth();
-  
+  const { user } = useUser();
+
   const [activeMenuId, setActiveMenuId] = useState(null);
 
   const activeItem = fakeMenuData.find((item) => item.id === activeMenuId);
@@ -61,8 +63,6 @@ export default function CategoryMegaMenu() {
     setActiveMenuId(null);
     setIsVisibleMenu(false);
   }
-
-
 
 
   return (
@@ -83,18 +83,19 @@ export default function CategoryMegaMenu() {
           ))}
           <button className="text-lg"><SearchOutlined /></button>
         </div>
+        
 
         <div className="space-x-10 pl-3">
           {isLoggedIn ? (
             <>
-              <span>Welcome back!</span>
-              <button onClick={logout}>Logout</button>
+               <button>{user.fullName}</button>
+               <button onClick={logout}>logout</button>
             </>
           ) : (
             <LoginMenu />
           )}
-          
-          <button>Cart</button>
+           <button>Cart</button>
+
         </div>
       </div>
 

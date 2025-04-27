@@ -1,10 +1,5 @@
-import { useModal } from '../context/ModalContext';
 
-export async function request(url, options = {}) {
-  const { getToken, logout } = useAuth();
-  const { openLoginModal } = useModal(); 
-
-  let token = getToken();
+export async function request(url, options = {}, token="") {
 
   const headers = {
     'Content-Type': 'application/json',
@@ -22,8 +17,6 @@ export async function request(url, options = {}) {
     });
 
     if (response.status === 401) {
-      logout();
-      openLoginModal(); 
       throw new Error('Unauthorized. Please log in again.');
     }
 
@@ -38,6 +31,8 @@ export async function request(url, options = {}) {
     if (!response.ok) {
       throw new Error(data?.error || 'Request failed');
     }
+    console.log("data")
+    console.log(data)
 
     return data;
   } catch (error) {
