@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
 import { Modal, Input, Button } from 'antd';
+import { useAuth } from '../hooks/useAuth';
 
-import LoginForm from './LoginForm';
-import RegisterForm from './RegisterForm';
+
+import LoginMenu from "./LoginMenu";
 
 const fakeMenuData = [
   {
@@ -44,10 +45,10 @@ const fakeMenuData = [
 
 
 export default function CategoryMegaMenu() {
+
+  const { isLoggedIn, logout } = useAuth();
+  
   const [activeMenuId, setActiveMenuId] = useState(null);
-
-
-
 
   const activeItem = fakeMenuData.find((item) => item.id === activeMenuId);
 
@@ -61,19 +62,6 @@ export default function CategoryMegaMenu() {
     setIsVisibleMenu(false);
   }
 
-  const [modalMode, setModalMode] = useState('close');
-
-  const openLogin = () => {
-    setModalMode('login');
-  };
-
-  const openRegister = () => {
-    setModalMode('register');
-  };
-
-  const closeModal = () => {
-    setModalMode('close');
-  };
 
 
 
@@ -97,27 +85,18 @@ export default function CategoryMegaMenu() {
         </div>
 
         <div className="space-x-10 pl-3">
-          <button onClick={() => openLogin()}>Login</button>
+          {isLoggedIn ? (
+            <>
+              <span>Welcome back!</span>
+              <button onClick={logout}>Logout</button>
+            </>
+          ) : (
+            <LoginMenu />
+          )}
+          
           <button>Cart</button>
         </div>
       </div>
-
-      <Modal
-        open={modalMode === 'login' || modalMode === 'register'}
-        onCancel={() => setModalMode('close')}
-        footer={null}
-        centered
-        closable
-        className="custom-login-modal"
-        zIndex={100}
-      >
-        {modalMode === 'login' && (
-        <LoginForm switchToRegister={() => setModalMode('register')} closeModal={() => setModalMode('close')} />
-      )}
-      {modalMode === 'register' && (
-        <RegisterForm switchToLogin={() => setModalMode('login')} closeModal={() => setModalMode('close')}/>
-      )}
-      </Modal>
 
 
       {/* Submenu Area */}

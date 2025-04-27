@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import {Input, message } from 'antd';
+import { Input, message } from 'antd';
+import { useAuth } from '../hooks/useAuth';
 
 export default function LoginForm({ switchToRegister, closeModal }) {
     const [email, setEmail] = useState('');
@@ -8,13 +9,16 @@ export default function LoginForm({ switchToRegister, closeModal }) {
     const [messageApi, contextHolder] = message.useMessage();
     const success = () => {
         messageApi.open({
-          type: 'Login success!',
-          content: 'You have successfully logged in.',
+            type: 'Login success!',
+            content: 'You have successfully logged in.',
         });
-      };
+    };
+
+    const { login } = useAuth();
 
 
     const handleLogin = async () => {
+
 
         try {
 
@@ -35,11 +39,12 @@ export default function LoginForm({ switchToRegister, closeModal }) {
             }
             const data = await response.json();
             setErrorMessage('')
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('expiresIn', data.expiresIn);
-            
+            // save token and expiresIn
+            login(data.token, data.expiresIn);
+
             success();
             closeModal();
+            window.location.reload();
             console.log('Login Success: ', data);
         } catch (error) {
             console.error('Login error: ', error);
